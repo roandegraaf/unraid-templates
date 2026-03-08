@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>DPB</Name>
+  <Repository>roandegraaf/dpb</Repository>
+  <Registry>https://hub.docker.com/r/roandegraaf/dpb</Registry>
+  <Branch>
+    <Tag>latest</Tag>
+    <TagDescription>Latest stable release</TagDescription>
+  </Branch>
+  <Network>bridge</Network>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/roandegraaf/DPB/issues</Support>
+  <Project>https://github.com/roandegraaf/DPB</Project>
+  <Overview>Debrid Plex Bridge (DPB) — a single Docker container that replaces multiple tools for managing Plex with Real-Debrid. Includes Zurg, rclone, Zilean, and a web UI for searching and requesting media.</Overview>
+  <Category>MediaServer:Video</Category>
+  <Icon>https://raw.githubusercontent.com/roandegraaf/unraid-templates/main/icons/dpb.png</Icon>
+  <Description>Debrid Plex Bridge (DPB) — a single Docker container that replaces multiple tools for managing Plex with Real-Debrid. Includes Zurg, rclone, Zilean, and a web UI for searching and requesting media.</Description>
+  <WebUI>http://[IP]:[PORT:3000]</WebUI>
+  <ExtraParams>--cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor:unconfined</ExtraParams>
+
+  <!-- Ports -->
+  <Config Name="WebUI Port" Target="3000" Default="3000" Mode="tcp" Description="Web interface port" Type="Port" Display="always" Required="true"/>
+
+  <!-- Paths -->
+  <Config Name="Config Path" Target="/config" Default="/mnt/user/appdata/dpb" Mode="rw" Description="Application config, database, and logs" Type="Path" Display="always" Required="true"/>
+  <Config Name="Library Path" Target="/library" Default="/mnt/user/data/media" Mode="rw" Description="Plex media library directory" Type="Path" Display="always" Required="true"/>
+  <Config Name="Zurg Mount" Target="/zurg-mount" Default="/mnt/user/zurg-mount" Mode="rw,shared" Description="FUSE mount point for Real-Debrid content via Zurg/rclone" Type="Path" Display="always" Required="true"/>
+
+  <!-- Required Variables -->
+  <Config Name="Real-Debrid API Key" Target="REALDEBRID_API_KEY" Default="" Description="Your Real-Debrid API key (https://real-debrid.com/apitoken)" Type="Variable" Display="always" Required="true"/>
+  <Config Name="TMDB API Key" Target="TMDB_API_KEY" Default="" Description="TMDB API key for metadata (https://www.themoviedb.org/settings/api)" Type="Variable" Display="always" Required="true"/>
+  <Config Name="NextAuth Secret" Target="NEXTAUTH_SECRET" Default="" Description="Random secret for session encryption. Generate with: openssl rand -base64 32" Type="Variable" Display="always" Required="true"/>
+
+  <!-- Optional Variables -->
+  <Config Name="Postgres Password" Target="POSTGRES_PASSWORD" Default="dpb" Description="PostgreSQL password (internal use)" Type="Variable" Display="advanced" Required="false"/>
+  <Config Name="Timezone" Target="TZ" Default="America/New_York" Description="Container timezone" Type="Variable" Display="always" Required="false"/>
+
+  <!-- Internal (hidden, sensible defaults) -->
+  <Config Name="Database URL" Target="DATABASE_URL" Default="postgresql://dpb:dpb@localhost:5432/dpb" Description="Internal PostgreSQL connection string" Type="Variable" Display="advanced" Required="false"/>
+  <Config Name="NextAuth URL" Target="NEXTAUTH_URL" Default="http://localhost:3000" Description="NextAuth base URL (change if using reverse proxy)" Type="Variable" Display="advanced" Required="false"/>
+  <Config Name="Library Path Env" Target="LIBRARY_PATH" Default="/library" Description="Internal library path (matches volume mount)" Type="Variable" Display="advanced" Required="false"/>
+  <Config Name="Zurg Mount Path Env" Target="ZURG_MOUNT_PATH" Default="/zurg-mount" Description="Internal Zurg mount path (matches volume mount)" Type="Variable" Display="advanced" Required="false"/>
+  <Config Name="Zilean URL" Target="ZILEAN_URL" Default="http://localhost:8181" Description="Internal Zilean service URL" Type="Variable" Display="advanced" Required="false"/>
+  <Config Name="Torrentio URL" Target="TORRENTIO_URL" Default="https://torrentio.strem.fun" Description="Torrentio scraper URL" Type="Variable" Display="advanced" Required="false"/>
+</Container>
